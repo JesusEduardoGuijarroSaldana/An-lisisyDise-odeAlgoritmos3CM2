@@ -9,60 +9,71 @@ package algoritmosordenamiento;
  *
  * @author guija
  */
-public class DMergeSort {
-    
-    public void ordenar(int arreglo[]){
-        if(arreglo.length > 1){ //se pregunta si arreglo tiene más de un elemento
-            int mitad = (arreglo.length/2);
-            int cant1 = mitad;
-            int cant2 = (arreglo.length-mitad);
-        
-        // creamos arreglos para cada mitad |            
-            int izq[] = new int[cant1];
-            int der[] = new int[cant2];
-        // copiamos los elementos para cada mitad
-            for(int indiceIzq=0; indiceIzq < cant1; indiceIzq++){
-                izq[indiceIzq] = arreglo[indiceIzq];
-            }
-            for(int indiceDer=0; indiceDer<cant2; indiceDer++){
-                der[indiceDer] = arreglo[mitad+indiceDer];
-            }
-            
-            ordenar(izq); // se vuelve a llamar ordenar y se parte el arreglo
-            ordenar(der); // se vuelve a llamar ordenar y se parte el arreglo
-            mezclar(arreglo, izq, der); // mezclamos las dos mitades
-        }
+public class DMergeSort implements NewInterface{
+
+    private double t_inicial;
+    private double t_final;
+    private double t_total;
+    private int[] datos;
+
+    public DMergeSort() {
+        this.t_inicial = 0;
+        this.t_final = 0;
+        this.t_total = 0;
     }
-    static void mezclar(int arreglo[], int izq[], int der[]){ // recibe el arreglo resultante y ambas mitades 
-        int indiceIzq=0, indiceDer=0, indiceArreglo=0;
-        
-        //copia y ordena los elementos de los arreglos izq[] y der[]
-        while(indiceIzq < izq.length && indiceDer < der.length){
-            if(izq[indiceIzq] < der[indiceDer]){
-                arreglo[indiceArreglo] = izq[indiceIzq];
-                indiceIzq+=1; // indiceIzq=IndiceIzq+1
-            }else{
-                arreglo[indiceArreglo] = der[indiceDer];
-                indiceDer+=1; // indiceDer=indiceDer+1
-            }
-            indiceArreglo+=1; // indiceArreglo=indiceArreglo+1
-        }
-        // verifica si aún hay elementos en alguna de las mitades para completar el arreglo final  
-        while(indiceIzq < izq.length){
-            arreglo[indiceArreglo] = izq[indiceIzq];
-            indiceIzq+=1;
-            indiceArreglo+=1;
-        }
-        while(indiceDer < der.length){
-            arreglo[indiceArreglo] = der[indiceDer];
-            indiceDer+=1;
-            indiceArreglo+=1;
-        }
-    }
-    /*public static void main(String[] args){
-        int datos[] = new int[]{8,3,6,1,2,5,7,10};
-        ordenar(datos);
-        System.out.println();
-    }*/
     
+    @Override
+    public void ordenar(int[] arreglo) {
+        this.datos = arreglo.clone();
+        this.t_inicial = System.currentTimeMillis();
+        ordenar(arreglo, 0, arreglo.length-1);
+        this.t_final = System.currentTimeMillis();
+        this.t_total = this.t_final - this.t_inicial;
+    }
+    
+    private void ordenar(int[] aux, int left, int right) {
+        // verificar por lo menos left sea menor que right
+        if (left < right){
+           int center = (left+right)/2;
+            ordenar(aux, left, center);
+            ordenar(aux, center+1, right);
+            merge(aux,left,center+1,right);
+        }
+        
+    }
+
+    private void merge(int[] aux, int posIzq, int posDer, int topeDer) {
+        // establecer unos limites
+        int leftEnd = posDer - 1;
+        int tmpPos = posIzq;
+        // calcular un numero de elementos 
+        int numElements = topeDer - posIzq + 1;
+        
+        // generar los cambios en el arreglo temporal 
+        while (posIzq <= leftEnd && posDer<=topeDer) {
+            if (this.datos[posIzq]<this.datos[posDer]){
+              aux[tmpPos++] = this.datos[posIzq++];
+            }else {
+               aux[tmpPos++] = this.datos[posDer++];
+            }
+        }
+        // copiar el resto de la primera mitad
+        while (posIzq <= leftEnd){
+          aux[tmpPos++] = this.datos[posIzq++];
+        }        
+        // copiar el resto de la segunda mitad
+         while (posDer <= topeDer){
+          aux[tmpPos++] = this.datos[posDer++];
+        }  
+        
+        // actualizar el arreglo 
+        // recorrer el arreglo
+        for (int i = 0; i < numElements; i++, topeDer--){
+        this.datos[topeDer] = aux[topeDer];
+        }  
+    }
+    @Override
+    public double getT_total(){
+        return t_total;
+    } 
 }

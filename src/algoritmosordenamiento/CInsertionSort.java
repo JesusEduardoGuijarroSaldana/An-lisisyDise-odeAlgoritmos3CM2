@@ -9,15 +9,23 @@ package algoritmosordenamiento;
  *
  * @author guija
  */
-public class CInsertionSort {
+public class CInsertionSort implements NewInterface {
 
     /*variables que serán utilizadas para generar una estimación de lo que tarda
     en el momento de ordenar */
-    long t_total;
-    long t_inicial; 
-    long t_final;
-
-    public void ordenarInsertionSort(int arreglo[]){
+    private double t_total;
+    private double t_inicial; 
+    private double t_final;
+    
+    public CInsertionSort(){
+        this.t_total=0.0;
+        this.t_inicial=0.0;
+        this.t_final=0.0;
+    }
+    @Override
+    public void ordenar(int arreglo[]){ //tenía ordenarInsertionSort, pero se necesita llamar ordenar
+    // antes de entrar al for
+        this.t_inicial = System.currentTimeMillis();
     //codificación del método de ordenamiento Insertion Sort
         for(int i=1; i<arreglo.length; i++){
             int j=i;
@@ -28,5 +36,12 @@ public class CInsertionSort {
             j--;
             }
         }
+    // saliendo del for
+        this.t_final = System.currentTimeMillis();
+        this.t_total = t_final-t_inicial;
+    }
+    @Override
+    public double getT_total(){
+        return t_total;
     }
 }

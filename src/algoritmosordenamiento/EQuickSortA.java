@@ -9,20 +9,17 @@ package algoritmosordenamiento;
  *
  * @author guija
  */
-public class EQuickSort implements NewInterface{
-    
-    private double t_inicial;
-    private double t_final;
+public class EQuickSortA {
     private double t_total;
-    private int[] datos;
-
-    public EQuickSort() {
-        this.t_inicial = 0;
-        this.t_final = 0;
-        this.t_total = 0;
+    private double t_inicial; 
+    private double t_final;
+    
+    public EQuickSortA(){
+        this.t_total=0.0;
+        this.t_inicial=0.0; 
+        this.t_final=0.0;
     }
     
-    @Override
     public void ordenar(int[] arreglo) {
         // verificar por lo menos left sea menor que right
        // implementar el metodo de ordenamiento por mezcla
@@ -38,9 +35,9 @@ public class EQuickSort implements NewInterface{
       this.t_total= this.t_final - this.t_inicial;
     }
         
-     private void ordenarQuick(int[] tmpArray, int izq, int der) {
+     private void ordenarQuick(int[] arregloTemp, int izq, int der) {
         // seleccionar el pivote 
-        int pivote = tmpArray[izq];
+        int pivote = arregloTemp[izq];
         // realiza la busqueda de izq a derecha
         int i = izq;
         // realiza la busqueda de derecha a izq
@@ -50,36 +47,30 @@ public class EQuickSort implements NewInterface{
         // mientras no se crucen las busquedas ( i y j)
         while (i<j){
             // buscar elemento mayor al pivote 
-            while (tmpArray[i]<= pivote && i<j) i++;
+            while (arregloTemp[i]<= pivote && i<j) i++;
             
             // buscar el elemento menor al pivote
-            while(tmpArray[j]>pivote) j--;
+            while(arregloTemp[j]>pivote) j--;
           // si no se han cruzado i y j
           // hacer intercambio
           if (i < j) {
-          aux = tmpArray[i];
-          tmpArray[i] = tmpArray[j];
-          tmpArray[j] = aux;
+          aux = arregloTemp[i];
+          arregloTemp[i] = arregloTemp[j];
+          arregloTemp[j] = aux;
           
           }
         }
         // colocar el pivote en su lugar de forma en que tendremos los menores 
         // a su izquierda y los mayores a su derecha
-        tmpArray[izq] = tmpArray[j];
-        tmpArray[j] = pivote;
+        arregloTemp[izq] = arregloTemp[j];
+        arregloTemp[j] = pivote;
         /// ordenar el sub arreglo izq
-        if (izq<j-1){
-            ordenarQuick(tmpArray,izq,j-1);
-        }
+        if (izq<j-1)
+            ordenarQuick(arregloTemp,izq,j-1);
           /// ordenar el sub arreglo der
-        if (j+1 < der){
-            ordenarQuick(tmpArray, j+1, der);
-        }
-     }
-     
-    @Override
-    public double getT_total(){
-        return t_total;
-    } 
-}
+        if (j+1 < der)
+            ordenarQuick(arregloTemp, j+1, der);   
+    }
     
+    
+}
